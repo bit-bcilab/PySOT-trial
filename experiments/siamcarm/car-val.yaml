@@ -1,0 +1,139 @@
+
+CROP_SETTINGS:
+    template:
+        context_amount: 0.5
+        keep_scale_prob: 1.0
+        min_scale: 0.999
+        max_scale: 1.001
+        crop_size_rate: 1.0
+        keep_center_prob: 1.0
+        box_protect_rate: 0.
+    search:
+        context_amount: 0.5
+        keep_scale_prob: 0.4
+        min_scale: 0.8
+        max_scale: 1.25
+        crop_size_rate: 2.0 # 2.25
+        keep_center_prob: 0.4
+        box_protect_rate: 0. # 0.15
+    val:
+        context_amount: 0.5
+        keep_scale_prob: 1.0
+        min_scale: 0.999
+        max_scale: 1.001
+        crop_size_rate: 2.0 # 2.25
+        keep_center_prob: 1.0
+        box_protect_rate: 0.01
+
+AUG_SETTINGS:
+    gray:
+        prob: 0.
+    mix:
+        prob: 0.
+        data_rate: 0.5
+        min_num: 1
+        max_num: 2
+        trans_rate_min: 0.8
+        trans_rate_max: 1.4
+    translation_other:
+        prob: 0.
+        data_rate: 0.5
+        trans_rate_min: 0.4
+        trans_rate_max: 1.0
+    translation_background:
+        prob: 0.
+        trans_rate_min: 0.2
+        trans_rate_max: 1.0
+        crop_rate_min: 0.95
+        crop_rate_max: 1.05
+    mixup:
+        prob: 0.
+        data_rate: 0.5
+        min_rate: 0.4
+        max_rate: 0.6
+
+    overlap_thresh: 0.8
+    try_num: 5
+    center_rate: 0.15
+    roi_rate_min: 1.15
+    roi_rate_max: 1.35
+
+    neg_pair:
+        prob: 0.03
+        data_rate: 0.75
+    disappear:
+        prob: 0.12
+        crop_rate_min: 0.95
+        crop_rate_max: 1.05
+    occ_background:
+        prob: 0.14
+        protect_rate_min: -0.1
+        protect_rate_max: 0.25
+        crop_rate_min: 0.95
+        crop_rate_max: 1.05
+    occ_object:
+        prob: 0.16
+        data_rate: 0.75
+
+    template:
+        flip:
+            prob: 0.
+        rotate:
+            prob: 0.
+            min_angle: 0.
+            max_angle: 0.
+        blur:
+            prob: 0.
+        motion:
+            prob: 0.
+            min_degree: 2
+            max_degree: 8
+            min_angle: 3
+            max_angle: 10
+        erase:
+            prob: 0.
+        resolution:
+            prob: 0.
+            low: 0.4
+            high: 0.6
+        pca:
+            prob: 0.
+        color:
+            prob: 0.
+    search:
+        flip:
+            prob: 0.
+            range: [0., 0.]
+            epochs: 0
+        rotate:
+            prob: 0.05
+            range: [0.05, 0.10]
+            epochs: 0
+            min_angle: 5.0
+            max_angle: 20.0
+        blur:
+            prob: 0.02
+        motion:
+            prob: 0.06
+            range: [0.06, 0.12]
+            epochs: 0
+            min_degree: 2
+            max_degree: 8
+            min_angle: 2
+            max_angle: 10
+        erase:
+            prob: 0.10
+            range: [0.10, 0.22]
+            epochs: 0
+        resolution:
+            prob: 0.15
+            range: [0.20, 0.32]
+            epochs: 0
+            low: 0.5
+            high: 0.75
+        pca:
+            prob: 0.0
+        color:
+            prob: 0.08
+            range: [0.08, 0.15]
+            epochs: 0

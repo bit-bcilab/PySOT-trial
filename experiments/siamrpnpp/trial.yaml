@@ -1,0 +1,78 @@
+META_ARC: "siamrpnpp"
+
+AMP: False
+MODE: 'trial-weighted'
+SELF_EPOCH: 16
+TRIAL_CFG: 'experiments/siamrpnpp/anchor-based-rpn.yaml'
+VALIDATE: True
+VALIDATE_CFG: 'experiments/siamrpnpp/rpn-val.yaml'
+
+BACKBONE:
+    TYPE: "resnet50"
+    KWARGS:
+        used_layers: [2, 3, 4]
+        freeze_bn: True
+    PRETRAINED: 'pretrained_models/siamban_r50.pth'  # 'pretrained_models/resnet50.model'
+    TRAIN_LAYERS: ['layer2', 'layer3', 'layer4']
+    TRAIN_EPOCH: 20 # 10
+    LAYERS_LR: 0.1 # 0.1
+
+ADJUST:
+    ADJUST: True
+    TYPE: "AdjustAllLayer"
+    KWARGS:
+        in_channels: [512, 1024, 2048]
+        out_channels: [256, 256, 256]
+
+RPN:
+    TYPE: 'MultiRPN'
+    KWARGS:
+        anchor_num: 5
+        in_channels: [256, 256, 256]
+        weighted: true
+
+MASK:
+    MASK: false
+
+ANCHOR:
+    STRIDE: 8
+    RATIOS: [0.33, 0.5, 1, 2, 3]
+    SCALES: [8]
+    ANCHOR_NUM: 5
+
+TRACK:
+    TYPE: 'SiamRPNpp'
+    CONTEXT_AMOUNT: 0.5
+    PENALTY_K: 0.05
+    WINDOW_INFLUENCE: 0.42
+    LR: 0.38
+    EXEMPLAR_SIZE: 127
+    INSTANCE_SIZE: 255
+    BASE_SIZE: 8
+
+TRAIN:
+    PRETRAINED: ''  # 'experiments/siamban/model.pth'
+    BATCH_SIZE: 32 # 28
+    PRINT_FREQ: 20
+    NUM_WORKERS: 16
+    LOG_GRADS: False
+    LOG_DIR: './logs'
+    SNAPSHOT_DIR: './snapshot/SiamRPNpp-trial/'
+
+    START_EPOCH: 0 # 0 or resume checkpoint
+    RESUME: '' #  or 'snapshot/abl-warmup/checkpoint_e16.pth'
+
+    EPOCH: 20
+    BASE_LR: 0.002
+    LR:
+        TYPE: 'log'
+        KWARGS:
+            start_lr: 0.002
+            end_lr: 0.00002
+    LR_WARMUP:
+        TYPE: 'step'
+        EPOCH: 4
+        KWARGS:
+            start_lr: 0.0005
+            end_lr: 0.002
+            step: 1

@@ -1,0 +1,71 @@
+META_ARC: "siamcarm"
+
+AMP: False
+MODE: 'trial'
+SELF_EPOCH: 20
+TRIAL_CFG: 'experiments/siamcarm/new/carm-baseline.yaml'
+VALIDATE: True
+VALIDATE_CFG: 'experiments/siamcarm/new/car-val.yaml'
+
+BACKBONE:
+    TYPE: "resnet50"
+    KWARGS:
+        used_layers: [2, 3, 4]
+        freeze_bn: True
+    PRETRAINED: 'pretrained_models/siamban_r50.pth'  # 'pretrained_models/resnet50.model'
+    TRAIN_LAYERS: ['layer2', 'layer3', 'layer4']
+    TRAIN_EPOCH: 20 # 10
+    LAYERS_LR: 0.1 # 0.1
+
+ADJUST:
+    ADJUST: True
+    TYPE: "AdjustAllLayer"
+    KWARGS:
+        in_channels: [512, 1024, 2048]
+        out_channels: [256, 256, 256]
+
+POINT:
+    STRIDE: 8
+
+TRACK:
+    TYPE: 'SiamCARM'
+    CONTEXT_AMOUNT: 0.5
+    PENALTY_K: 0.04
+    WINDOW_INFLUENCE: 0.44
+    LR: 0.33
+    EXEMPLAR_SIZE: 127
+    INSTANCE_SIZE: 255
+    STRIDE: 8
+    OFFSET: 32  # 31
+
+TRAIN:
+    NUM_CLASSES: 2
+    NUM_CONVS: 4
+    PRIOR_PROB: 0.01
+    OUTPUT_SIZE: 25 # 31
+
+    PRETRAINED: ''  # 'experiments/siamban/model.pth'
+    BATCH_SIZE: 32 # 28
+    PRINT_FREQ: 20
+    NUM_WORKERS: 16
+    LOG_GRADS: False
+    LOG_DIR: './logs'
+    SNAPSHOT_DIR: './snapshot/SiamCARM-baseline/'
+
+    START_EPOCH: 0 # 0 or resume checkpoint
+    RESUME: '' #  or 'snapshot/abl-warmup/checkpoint_e16.pth'
+
+    EPOCH: 20
+    BASE_LR: 0.004
+    LR:
+        TYPE: 'log'
+        KWARGS:
+            start_lr: 0.004
+            end_lr: 0.00004
+    LR_WARMUP:
+        TYPE: 'step'
+        EPOCH: 4
+        KWARGS:
+            start_lr: 0.001
+            end_lr: 0.004
+            step: 1

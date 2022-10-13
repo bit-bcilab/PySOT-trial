@@ -1,0 +1,101 @@
+META_ARC: "siamcarm"
+
+BACKBONE:
+    TYPE: "resnet50"
+    KWARGS:
+        used_layers: [2, 3, 4]
+    PRETRAINED: 'pretrained_models/siamcar_r50.pth' # ''
+    TRAIN_LAYERS: ['layer2','layer3','layer4']
+    TRAIN_EPOCH: 10
+    LAYERS_LR: 0.1
+
+ADJUST:
+    ADJUST: true
+    TYPE: "AdjustAllLayer"
+    KWARGS:
+        in_channels: [512, 1024, 2048]
+        out_channels: [256, 256, 256]
+
+
+TRACK:
+    TYPE: 'SiamCARM'
+
+    # GOT-10k test1 0.619	0.745	0.506
+#    CONTEXT_AMOUNT: 0.4957428
+#    WINDOW_INFLUENCE: 0.4636930
+#    PENALTY_K: 0.0348719
+#    LR: 0.5544950
+    # GOT-10k test2 0.638	0.765	0.520
+    CONTEXT_AMOUNT: 0.4858278
+    WINDOW_INFLUENCE: 0.3706324
+    PENALTY_K: 0.1066529
+    LR: 0.5956229
+#    # GOT-10k test3  0.637	0.767	0.519
+#    CONTEXT_AMOUNT: 0.4923952
+#    WINDOW_INFLUENCE: 0.4344699
+#    PENALTY_K: 0.0507161
+#    LR: 0.5789398
+
+    EXEMPLAR_SIZE: 127
+    INSTANCE_SIZE: 255
+    STRIDE: 8
+    OFFSET: 32  # 31
+
+TRAIN:
+    BATCH_SIZE: 32 # 80
+    NUM_WORKERS: 8
+    PRETRAINED: '' # 'experiments/siamcar/model.pth'
+    BASE_LR: 0.005
+    CLS_WEIGHT: 1.0
+    LOC_WEIGHT: 3.0
+    CEN_WEIGHT: 1.0
+
+    EPOCH: 20
+    START_EPOCH: 0
+
+    RESUME: ''
+    NUM_CLASSES: 2
+    NUM_CONVS: 4
+    PRIOR_PROB: 0.01
+    OUTPUT_SIZE: 25 # 31
+
+    LR:
+        TYPE: 'log'
+        KWARGS:
+            start_lr: 0.005
+            end_lr: 0.0005
+    LR_WARMUP:
+        TYPE: 'step'
+        EPOCH: 5
+        KWARGS:
+            start_lr: 0.001
+            end_lr: 0.005
+            step: 1
+
+DATASET:
+    NAMES:
+    - 'VID'
+    - 'COCO'
+    - 'DET'
+    - 'GOT10K'
+    - 'LASOT'
+    - 'YOUTUBEBB'
+
+    VIDEOS_PER_EPOCH: 600000
+
+    TEMPLATE:
+        SHIFT: 4
+        SCALE: 0.05
+        BLUR: 0.0
+        FLIP: 0.0
+        COLOR: 1.0
+
+    SEARCH:
+        SHIFT: 64
+        SCALE: 0.18
+        BLUR: 0.2
+        FLIP: 0.0
+        COLOR: 1.0
+
+    NEG: 0.0
+    GRAY: 0.0

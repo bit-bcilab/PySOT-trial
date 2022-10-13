@@ -1,0 +1,74 @@
+META_ARC: "transt"
+
+BACKBONE:
+    TYPE: "transt_resnet50_pe"
+    KWARGS:
+        output_layers: ['layer3']
+        frozen_layers: 'all'
+        position_embedding: 'sine'
+        hidden_dim: 256
+    PRETRAINED:  'pretrained_models/ori_resnet50_pe.pth' # ''
+    OUTPUT_LAYERS: ['layer3']
+    TRAIN_LAYERS: ['layer2', 'layer3']
+    TRAIN_EPOCH: 20
+    LAYERS_LR: 0.1
+
+ADJUST:
+    ADJUST: False
+
+TRANS:
+    position_embedding: 'sine'
+    hidden_dim: 256
+    dropout: 0.1
+    nheads: 8
+    dim_feedforward: 2048
+    featurefusion_layers: 4
+
+NUM_CLASSES: 1
+
+POINT:
+    STRIDE: 8
+
+TRACK:
+    TYPE: 'TransT'
+#    # GOT-10k test1 0.633	0.747	0.542
+#    CONTEXT_AMOUNT: 0.5005718
+#    WINDOW_INFLUENCE: 0.2859265
+#    PENALTY_K: 0.0269707
+#    LR: 0.5910656
+
+    CONFIDENCE: 0.
+    CONTEXT_AMOUNT: 0.5
+    WINDOW_INFLUENCE: 0.49
+
+    EXEMPLAR_SIZE: 128
+    INSTANCE_SIZE: 256
+    BASE_SIZE: 8
+
+TRAIN:
+    BATCH_SIZE: 28
+    NUM_WORKERS: 8
+    PRINT_FREQ: 20
+
+    BASE_LR: 0.005
+    CLS_WEIGHT: 1.0
+    LOC_WEIGHT: 1.0
+
+    EPOCH: 20
+    START_EPOCH: 0 # 0 or resume checkpoint
+    RESUME: '' # '' or 'snapshot/checkpoint_e.pth'
+    PRETRAINED:  # '' 'experiments/siamban/model.pth'
+
+    LR:
+        TYPE: 'log'
+        KWARGS:
+            start_lr: 0.005
+            end_lr: 0.00005
+    LR_WARMUP:
+        TYPE: 'step'
+        EPOCH: 5
+        KWARGS:
+            start_lr: 0.001 # 0.0001
+            end_lr: 0.005
+            step: 1
+

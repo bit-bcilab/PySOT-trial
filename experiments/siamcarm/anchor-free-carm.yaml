@@ -1,0 +1,293 @@
+
+BBOX_MASK_RATE: 0.
+MIX_BOXES: True
+
+ENCODER: ellipse-mix
+SELF_ENCODER: ellipse-self
+ENCODE_SETTINGS:
+    pos_num: 16
+    neg_num: 48
+    pos_radium: 4.0
+    neg_radium: 2.0
+    reg_type: ltrb
+ENCODE_SETTINGS_SELF:
+    pos_num: 16
+    pos_radium: 4.0
+    neg_radium: 2.0
+    reg_type: ltrb
+
+WEIGHT_SETTINGS:
+    l1_weight: 0.
+    iou_weight: 1.2
+    pos_weight: 0.666
+    neg_weight: 0.333
+
+WEIGHT_SETTINGS_SELF:
+    l1_weight: 0.
+    iou_weight: 1.2
+    pos_weight: 0.75
+    neg_weight: 0.25
+
+UPDATE_SETTINGS:
+    pos_num: 16
+    neg_num: 48
+    pos_iou_thresh: 0.7
+    neg_iou_thresh: 0.10
+    neg_score_thresh: 0.30
+    easy_neg_num: 16
+    hard_neg_num: 32
+
+CROP_SETTINGS:
+    template:
+        context_amount: 0.5
+        keep_scale_prob: 0.8
+        min_scale: 0.85
+        max_scale: 1.15
+        crop_size_rate: 1.0
+        keep_center_prob: 1.0
+        box_protect_rate: 0.
+    search:
+        context_amount: 0.5
+        keep_scale_prob: 0.25
+        min_scale: 0.75
+        max_scale: 1.35
+#        min_scale_: 0.69
+#        max_scale_: 1.40
+        crop_size_rate: 2.0 # 2.25
+        keep_center_prob: 0.25
+        box_protect_rate: -0.05 # 0.15
+    val:
+        context_amount: 0.5
+        keep_scale_prob: 1.0
+        min_scale: 0.999
+        max_scale: 1.001
+        crop_size_rate: 2.0 # 2.25
+        keep_center_prob: 1.0
+        box_protect_rate: 0.01
+
+AUG_SETTINGS:
+    gray:
+        prob: 0.
+    mix:
+        prob: 0.32
+        data_rate: 0.5
+        min_num: 1
+        max_num: 2
+        trans_rate_min: 1.2
+        trans_rate_max: 2.0
+    translation_other:
+        prob: 0.12
+        data_rate: 0.5
+        trans_rate_min: 1.2
+        trans_rate_max: 2.0
+    translation_background:
+        prob: 0.24
+        trans_rate_min: 0.2
+        trans_rate_max: 1.0
+        crop_rate_min: 0.95
+        crop_rate_max: 1.05
+    mixup:
+        prob: 0.
+        data_rate: 0.5
+        min_rate: 0.4
+        max_rate: 0.6
+
+    overlap_thresh: 0.85
+    try_num: 5
+    center_rate: 0.15
+    roi_rate_min: 1.15
+    roi_rate_max: 1.35
+
+    neg_pair:
+        prob: 0.04
+        data_rate: 0.75
+    disappear:
+        prob: 0.18
+        crop_rate_min: 0.95
+        crop_rate_max: 1.05
+    occ_background:
+        prob: 0.24
+        protect_rate_min: 0.5
+        protect_rate_max: 1.0
+        crop_rate_min: 0.95
+        crop_rate_max: 1.05
+    occ_object:
+        prob: 0.30
+        data_rate: 0.75
+
+    template:
+        flip:
+            prob: 0.
+        rotate:
+            prob: 0.
+            min_angle: 0.
+            max_angle: 0.
+        blur:
+            prob: 0.
+        motion:
+            prob: 0.
+            min_degree: 2
+            max_degree: 8
+            min_angle: 3
+            max_angle: 10
+        erase:
+            prob: 0.
+        resolution:
+            prob: 0.
+            low: 0.4
+            high: 0.6
+        pca:
+            prob: 0.
+        color:
+            prob: 0.
+    search:
+        flip:
+            prob: 0.03
+            range: [0., 0.]
+            epochs: 0
+        rotate:
+            prob: 0.13
+            range: [0.05, 0.10]
+            epochs: 0
+            min_angle: 3.0
+            max_angle: 20.0
+        blur:
+            prob: 0.05
+        motion:
+            prob: 0.15
+            range: [0.06, 0.12]
+            epochs: 0
+            min_degree: 1
+            max_degree: 8
+            min_angle: 1
+            max_angle: 10
+        erase:
+            prob: 0.28
+            range: [0.10, 0.22]
+            epochs: 0
+        resolution:
+            prob: 0.40
+            range: [0.20, 0.32]
+            epochs: 0
+            low: 0.4
+            high: 0.7
+        pca:
+            prob: 0.0
+        color:
+            prob: 0.15
+            range: [0.08, 0.15]
+            epochs: 0
+
+DATA_SETTINGS:
+    read_bgr: True
+    dataset_used:
+    - DET
+    - DET_val
+    - COCO
+    - COCO_val
+    - VID
+    - VID_val
+    - YBB
+    - YBB_val
+    - LaSOT
+    - GOT
+    - GOT_val
+    DET:
+        label_path: det-train.json
+        match_range: 1
+        num_data: 333385
+        multiply: 1
+        num_val: 0
+        num_val_objects: 0
+        num_train: 35000
+        num_train_objects: 35000
+    DET_val:
+        label_path: det-val.json
+        match_range: 1
+        num_data: 18672
+        multiply: 1
+        num_val: 0
+        num_val_objects: 0
+        num_train: 4000
+        num_train_objects: 4000
+    COCO:
+        label_path: coco-train.json
+        match_range: 1
+        num_data: 117192
+        multiply: 4
+        num_val: 700
+        num_val_objects: 2800
+        num_train: 15000
+        num_train_objects: 60000
+    COCO_val:
+        label_path: coco-val.json
+        match_range: 1
+        num_data: 4949
+        multiply: 4
+        num_val: 0
+        num_val_objects: 0
+        num_train: 500
+        num_train_objects: 2000
+    VID:
+        label_path: vid-train.json
+        match_range: init
+        num_data: 3862
+        multiply: 12
+        num_val: 0
+        num_val_objects: 0
+        num_train: 3862
+        num_train_objects: 42000
+    VID_val:
+        label_path: vid-val.json
+        match_range: init
+        num_data: 555
+        multiply: 12
+        num_val: 0
+        num_val_objects: 0
+        num_train: 555
+        num_train_objects: 6500
+    YBB:
+        label_path: ybb-train.json
+        match_range: init
+        num_data: 188209
+        multiply: 2
+        num_val: 0
+        num_val_objects: 0
+        num_train: 15000
+        num_train_objects: 30000
+    YBB_val:
+        label_path: ybb-val.json
+        match_range: init
+        num_data: 9223
+        multiply: 2
+        num_val: 0
+        num_val_objects: 0
+        num_train: 1000
+        num_train_objects: 2000
+    GOT:
+        label_path: got-train.json
+        match_range: init
+        num_data: 9333
+        multiply: 7
+        num_val: 0
+        num_val_objects: 0
+        num_train: 9333
+        num_train_objects: 61000
+    GOT_val:
+        label_path: got-val.json
+        match_range: init
+        num_data: 180
+        multiply: 6
+        num_val: 0
+        num_val_objects: 0
+        num_train: 180
+        num_train_objects: 1000
+    LaSOT:
+        label_path: lasot-train.json
+        match_range: init
+        num_data: 1118
+        multiply: 30
+        num_val: 0
+        num_val_objects: 0
+        num_train: 1118
+        num_train_objects: 33000

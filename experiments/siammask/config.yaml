@@ -1,0 +1,107 @@
+META_ARC: "siammask"
+
+BACKBONE:
+    TYPE: "resnet50"
+    KWARGS:
+        used_layers: [0, 1, 2, 3]
+    PRETRAINED: 'pretrained_models/siammask_r50.pth' # ''
+    TRAIN_LAYERS: ['layer2', 'layer3']
+    TRAIN_EPOCH: 10
+    LAYERS_LR: 0.1
+
+ADJUST:
+    ADJUST: true
+    TYPE: "AdjustAllLayer"
+    KWARGS:
+        in_channels: [1024]
+        out_channels: [256]
+
+RPN:
+    TYPE: 'DepthwiseRPN'
+    KWARGS:
+        anchor_num: 5
+        in_channels: 256
+        out_channels: 256
+
+MASK:
+    MASK: True
+    TYPE: 'MaskCorr'
+    KWARGS:
+        in_channels: 256
+        hidden: 256
+        out_channels: 3969
+
+REFINE:
+    REFINE: True
+    TYPE: 'Refine'
+
+ANCHOR:
+    STRIDE: 8
+    RATIOS: [0.33, 0.5, 1, 2, 3]
+    SCALES: [8]
+    ANCHOR_NUM: 5
+
+TRACK:
+    TYPE: 'SiamMask'
+    PENALTY_K: 0.10
+    WINDOW_INFLUENCE: 0.41
+    LR: 0.32
+    EXEMPLAR_SIZE: 127
+    INSTANCE_SIZE: 255
+    BASE_SIZE: 8
+    CONTEXT_AMOUNT: 0.5
+    MASK_THERSHOLD: 0.15
+
+TRAIN:
+    BATCH_SIZE: 28
+    NUM_WORKERS: 8
+    PRETRAINED: '' # 'experiments/siammask/model.pth'
+
+    BASE_LR: 0.005
+    CLS_WEIGHT: 1.0
+    LOC_WEIGHT: 1.0
+
+    EPOCH: 20
+    START_EPOCH: 0 # 0 or resume checkpoint
+    RESUME: '' # '' or 'snapshot/checkpoint_e.pth'
+
+    LR:
+        TYPE: 'log'
+        KWARGS:
+            start_lr: 0.005
+            end_lr: 0.00005
+    LR_WARMUP:
+        TYPE: 'step'
+        EPOCH: 5
+        KWARGS:
+            start_lr: 0.001
+            end_lr: 0.005
+            step: 1
+
+DATASET:
+    NAMES:
+    - 'VID'
+    - 'COCO'
+    - 'DET'
+    - 'GOT10K'
+    - 'LASOT'
+    - 'YOUTUBEBB'
+
+    VIDEOS_PER_EPOCH: 1000000
+
+    TEMPLATE:
+        SHIFT: 4
+        SCALE: 0.05
+        BLUR: 0.0
+        FLIP: 0.0
+        COLOR: 1.0
+
+    SEARCH:
+        SHIFT: 64
+        SCALE: 0.18
+        BLUR: 0.2
+        FLIP: 0.0
+        COLOR: 1.0
+
+    NEG: 0.2
+    GRAY: 0.0
