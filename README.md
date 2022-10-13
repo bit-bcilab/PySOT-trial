@@ -1,9 +1,19 @@
 
 # PySOT-trial
-Official implementation of the *Negative-Driven Training Pipeline For Siamese Visual Tracking*.
+Official implementation of the paper "*Negative-Driven Training Pipeline For Siamese Visual Tracking*".
 
 This work proposes a tracking-specific and negative-driven training pipeline to improve the performances
 of Siamese trackers (and Transformer trackers) without any extra inference cost.
+
+## Abstract
+In this paper, 
+we strive to yield a negative-driven training pipeline to unleash the potential of Siamese framework without any extra inference cost. 
+Specifically, 
+1) We devise strong negative augmentation based on copy-paste to take full advantage of available annotations and improve the quality and difficulty of examples. 
+2) We jointly utilize existing annotations and model outputs in assignment to efficiently mine more proper and challenging negative examples for tracking task. 
+3) We modify the loss weight matrix to smoothly control the contributions of examples and bridge sub-tasks.
+![Alt text](trial/framework.PNG)
+
 
 ## Acknowledgement and Introduction
 This work can be viewed as an extension of the [PySOT](https://github.com/STVIR/pysot), one of the most popular 
